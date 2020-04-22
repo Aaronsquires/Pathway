@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "322763054216",
+    "firebase_url": "https://pathwayv2.firebaseio.com",
+    "project_id": "pathwayv2",
+    "storage_bucket": "pathwayv2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322763054216:android:68a4e9a2882419bda8d33d",
+        "android_client_info": {
+          "package_name": "com.aaronsquires.pathway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322763054216-1dse5mgah9a5p3ni8li9ejr3a2ps0i29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPA6vL_jocIVMQHd-Q8Ma94hJbBJSS_5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322763054216-1dse5mgah9a5p3ni8li9ejr3a2ps0i29.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "322763054216-b4sn02b82n928qe0nttmjetuc64g8m89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aaronsquires.pathway"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
