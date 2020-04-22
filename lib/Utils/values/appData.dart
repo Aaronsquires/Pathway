@@ -42,6 +42,7 @@ List<String> counties = [
   'Rutland',
   'Shropshire',
   'Somerset',
+  'Scotland',
   'South Yorkshire',
   'Staffordshire',
   'Suffolk',
@@ -54,7 +55,7 @@ List<String> counties = [
   'Wiltshire'
 ];
 
-List<String> grades = ['All', 'first', '2:1', '2:2', 'third'];
+List<String> grades = ['All', 'First', '2:1', '2:2', 'Third'];
 
 List<String> locations = [
   'All',

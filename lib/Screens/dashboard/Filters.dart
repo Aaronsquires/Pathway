@@ -140,13 +140,7 @@ class _FiltersListState extends State<FiltersList> {
                             fontSize: 14.0);
                       },
                       elevation: 10,
-                      items: <String>[
-                        'All',
-                        'Education',
-                        'Engineering',
-                        'Computing',
-                        'Banking',
-                        'Design'
+                      items: <String>[ 'All', 'Education','Engineering', 'Computing', 'Banking', 'Design'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                             value: value, child: Text(value));
