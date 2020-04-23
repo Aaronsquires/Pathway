@@ -42,7 +42,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   @override
   void initState() {
     //set tab controller length
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -128,9 +128,9 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           tabs: <Widget>[
             Container(child: Text("All")),
-            Container(
-              child: Text("Filtered"),
-            ),
+            // Container(
+            //   child: Text("Filtered"),
+            // ),
             Container(
               child: Text("Recommended"),
             ),
@@ -152,7 +152,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             physics: NeverScrollableScrollPhysics(),
             controller: tabController,
             children: <Widget>[
-              _buildAllJobsSection(),
+              // _buildAllJobsSection(),
               _buildFilterJobsSection(),
               _buildRecommendedJobsSection(userData)
             ],
@@ -162,44 +162,34 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   //All Jobs Section
   Widget _buildAllJobsSection() {
+    //Access the the JobBoard stream via the getJobs Provider in Database
     var jobs = Provider.of<List<Jobs>>(context);
+    //if there is no jobs collected then load the loading() function
     if (jobs != null) {
+      //Build the Listview
       return ListView.separated(
-        itemCount: jobs.length + 1,
+        //Set the amount of items in the list to max amount of items in the jobboard
+        itemCount: jobs.length,
         itemBuilder: (context, index) {
-          //Adds the Google AdMob at start of the list
-          if(index == 0){
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 80,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: DarkColors.secondaryColor,
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                child: Center(
-                  child: Text(
-                    'PlaceHolder Ad'
-                  ),
-                ),
-              ),
-            );
-          }
-          index -= 1;
+          //removes the need to call index each time
           Jobs job = jobs[index];
+          //adds on on pressed to the whole of the job card
           return GestureDetector(
             onTap: () {
+              //gets the title of the job pressed
               var currentJob = job.jobTitle;
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => JobAdvert(),
+                  //pushed the job titles name into the jobadvert
                   settings: RouteSettings(
                     arguments: currentJob,
                   ),
                 ),
               );
             },
+            //calls the JobCard Widget
             child: JobCard(
               logo: job.logo,
               title: job.jobTitle,
@@ -210,6 +200,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ),
           );
         },
+        //adds the seperated box
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(
             height: 20,
@@ -217,6 +208,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         },
       );
     } else {
+      //calls the loading() functions
       return OnPageLoading();
     }
   }
@@ -380,7 +372,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                             color: DarkColors.primaryColorDarker,
                             fontWeight: FontWeight.w800),
                       ),
-                      Text('Update your information')
+                      Text('Update your account information')
                     ],
                   ),
                 ),

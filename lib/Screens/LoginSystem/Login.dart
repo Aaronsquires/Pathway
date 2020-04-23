@@ -135,7 +135,6 @@ class _SignInState extends State<SignIn> {
                 child: TextFormField(
                   decoration: textInputDecoration.copyWith(
                     hintText: 'Email',
-
                     //Sets the icon depending on the App Platform 
                     prefixIcon: Icon(
                       (Platform.isIOS) ? CupertinoIcons.mail : Icons.email,
@@ -148,14 +147,13 @@ class _SignInState extends State<SignIn> {
                       color: DarkColors.textFormFieldTextColor,
                       fontSize: 16),              
                   //checks if the user has entereed data if not will return an error to Enter an Email
-                  validator: (val) =>
-                      val.isEmpty ? 'Enter an email' : null,
+                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
                   //when the user inputs data the onChanged will set value data into the email variable
-                  onChanged: (val) {
-                    setState(() => email = val);
-                  },
+                  onChanged: (val) {setState(() => email = val);},
                 ),
               ),
+
+              //spacing
               SizedBox(height: screenHeight / 35.84),
 
               //Email - Logs in with the users password
@@ -206,8 +204,7 @@ class _SignInState extends State<SignIn> {
                         () => loading = true,
                       );
                       print(loading);
-                      dynamic result =
-                          await _auth.loginUser(email, password);
+                      dynamic result = await _auth.loginUser(email, password);
                       if (result == null) {
                         setState(() {
                           error = 'Email or Password incorrect please try again';
@@ -226,6 +223,8 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
+
+              //spacing
               SizedBox(height: screenHeight / 35.84),
 
               //Calls the account recovery page

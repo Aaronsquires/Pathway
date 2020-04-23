@@ -60,7 +60,7 @@ class FirestoreService {
 
   Stream<List<Jobs>> getJobs() {
     return _db.collection('JobBoard')
-      .orderBy('category')
+      .orderBy('category', descending: true)
       .snapshots()
       .map((snapshot) => snapshot.documents
       .map((document) => Jobs.fromJson(document.data))
