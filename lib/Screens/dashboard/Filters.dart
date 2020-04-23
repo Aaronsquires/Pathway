@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pathway/Models/Services/filters_api.dart';
 import 'package:pathway/Models/Services/settings_api.dart';
-import 'package:pathway/Utils/values/appData.dart';
 import 'package:pathway/Utils/values/values.dart';
 import 'package:provider/provider.dart';
 

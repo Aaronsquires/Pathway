@@ -22,8 +22,6 @@ import 'package:pathway/Utils/values/appData.dart';
 import 'package:pathway/Utils/values/values.dart';
 import 'package:provider/provider.dart';
 
-const String testDevice = 'MobileId';
-
 //dashboard
 class Dashboard extends StatefulWidget {
   @override
