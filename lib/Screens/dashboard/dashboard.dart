@@ -1,4 +1,6 @@
 //imports
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pathway/Models/Classes/User.dart';
@@ -15,6 +17,7 @@ import 'package:pathway/Screens/dashboard/search.dart';
 import 'package:pathway/Utils/Widgets/Animations.dart';
 import 'package:pathway/Utils/Widgets/Loading.dart';
 import 'package:pathway/Utils/Widgets/SmallCategoryCard.dart';
+import 'package:pathway/Utils/Widgets/TextFields.dart';
 import 'package:pathway/Utils/Widgets/bottomButtonBar.dart';
 import 'package:pathway/Utils/Widgets/jobCard.dart';
 import 'package:pathway/Utils/Widgets/sideMenu.dart';
@@ -29,11 +32,15 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
-
-
   //tabbar controller
   TabController tabController;
   bool loading = false;
+  bool condition = false;
+
+  TextEditingController editingController = TextEditingController();
+
+  final duplicateItems = List<String>.generate(10000, (i) => "Item $i");
+  var items = List<String>();
 
   //Search Button onPressed -> navigates to search page
   void onSearchButtonPressed(BuildContext context) =>
@@ -43,6 +50,8 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   void initState() {
     //set tab controller length
     tabController = TabController(length: 2, vsync: this);
+
+    items.addAll(duplicateItems);
     super.initState();
   }
 
@@ -50,6 +59,138 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     tabController.dispose();
+  }
+
+  Widget _buildSearchDialog() {
+    SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    var searchString = '';
+    var jobs = Provider.of<List<Jobs>>(context);
+    return Dialog(
+      backgroundColor: (settings.colortheme == 'Dark')
+          ? DarkColors.primaryColor
+          : LightColors.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.18,
+              decoration: BoxDecoration(
+                  color: (settings.colortheme == 'Dark')
+                      ? DarkColors.primaryColorDarker
+                      : LightColors.primaryColorLighter,
+                  borderRadius:
+                      BorderRadius.only(bottomRight: Radius.circular(35))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Search',
+                            style: ThemeText.titleStyle.copyWith(
+                              color: (settings.colortheme == 'Dark')
+                                  ? DarkColors.primaryTextColor
+                                  : LightColors.primaryTextColor,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              size: 30,
+                            ),
+                            color: DarkColors.primaryTextColor,
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
+                      },
+                      controller: editingController,
+                      decoration: textInputDecoration.copyWith(
+                          fillColor: Colors.white,
+                          hintText: 'Search for Job Application...',
+                          prefixIcon: Icon(
+                            (Platform.isIOS)
+                                ? CupertinoIcons.search
+                                : Icons.search,
+                            color: DarkColors.textFormFieldTextColor,
+                            size: 30,
+                          )),
+                      style: TextStyle(
+                          color: DarkColors.primaryColorDarker, fontSize: 14),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              height: 600,
+              child: ListView.separated(
+                itemCount: jobs.length,
+                itemBuilder: (context, index) {
+                  Jobs job = jobs[index];
+                  return GestureDetector(
+                    onTap: () {
+                      var currentJob = job.jobTitle;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JobAdvert(),
+                          settings: RouteSettings(
+                            arguments: currentJob,
+                          ),
+                        ),
+                      );
+                    },
+                    child: JobCard(
+                      logo: job.logo,
+                      title: job.jobTitle,
+                      date: job.endDate,
+                      grade: job.gradeRequired,
+                      pay: job.pay,
+                      location: job.location,
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 20,
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   //Horizontal ListView for categories
@@ -232,35 +373,34 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             : filters.location.contains(jobs.location))
         .toList();
 
-    List<String> chips = [
-      filters.grade, filters.category, filters.location
-    ];
+    List<String> chips = [filters.grade, filters.category, filters.location];
 
     if (jobs != null) {
       return ListView.separated(
-       itemCount: jobs.length + 1,
+        itemCount: jobs.length + 1,
         itemBuilder: (context, index) {
           //Adds the Google AdMob at start of the list
-          if(index == 0){
-           return Wrap(
-             spacing: 6,
-             runSpacing: 6,
-             children: List<Widget>.generate(chips.length, (int index) {
-               return Chip(
-                 label: Text(chips[index], style: TextStyle(
-                   color: DarkColors.primaryTextColor
-                 ),),
-                 deleteIconColor: DarkColors.secondaryColor,     
-                 onDeleted: () {
-                   (chips[index] == filters.category) ?
-                   filters.setCategory('All') : (chips[index] == filters.grade) ?
-                   filters.setGrade('All') : filters.setLocation('All');
-                 },
-                 backgroundColor: DarkColors.primaryColorDark,
-              );
-
-             }
-           ));
+          if (index == 0) {
+            return Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: List<Widget>.generate(chips.length, (int index) {
+                  return Chip(
+                    label: Text(
+                      chips[index],
+                      style: TextStyle(color: DarkColors.primaryTextColor),
+                    ),
+                    deleteIconColor: DarkColors.secondaryColor,
+                    onDeleted: () {
+                      (chips[index] == filters.category)
+                          ? filters.setCategory('All')
+                          : (chips[index] == filters.grade)
+                              ? filters.setGrade('All')
+                              : filters.setLocation('All');
+                    },
+                    backgroundColor: DarkColors.primaryColorDark,
+                  );
+                }));
           }
           index -= 1;
           print(jobs[index].category);
@@ -300,15 +440,9 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 
   Widget _buildRecommendedJobsSection(userData) {
-    var recommended;
-    (userData.disciplin == 'Computer Science')
-        ? recommended = 'Computing'
-        : (userData.disciplin == 'Teacher')
-            ? recommended = 'Education'
-            : recommended = '';
-    var jobs = Provider.of<List<Jobs>>(context)
-        .where((jobs) => recommended.contains(jobs.category))
-        .toList();
+    var searchString = 'Software Developer';
+
+    var jobs = Provider.of<List<Jobs>>(context);
 
     if (jobs != null) {
       return ListView.separated(
@@ -348,8 +482,58 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       return OnPageLoading();
     }
   }
+  // Widget _buildRecommendedJobsSection(userData) {
+  //   var searchString = 'Software Developer';
+  //   var recommended;
+  //   (userData.disciplin == 'Computer Science')
+  //       ? recommended = 'Computing'
+  //       : (userData.disciplin == 'Teacher')
+  //           ? recommended = 'Education'
+  //           : recommended = '';
+  //   var jobs = Provider.of<List<Jobs>>(context)
+  //       .where((jobs) => recommended.contains(jobs.category))
+  //       .toList();
 
-  Widget _buildAccountInformation() {
+  //   if (jobs != null) {
+  //     return ListView.separated(
+  //       itemCount: jobs.length,
+  //       itemBuilder: (context, index) {
+  //         Jobs job = jobs[index];
+  //         return GestureDetector(
+  //           onTap: () {
+  //             var currentJob = job.jobTitle;
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                 builder: (context) => JobAdvert(),
+  //                 settings: RouteSettings(
+  //                   arguments: currentJob,
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //           child: JobCard(
+  //             logo: job.logo,
+  //             title: job.jobTitle,
+  //             date: job.endDate,
+  //             grade: job.gradeRequired,
+  //             pay: job.pay,
+  //             location: job.location,
+  //           ),
+  //         );
+  //       },
+  //       separatorBuilder: (BuildContext context, int index) {
+  //         return SizedBox(
+  //           height: 20,
+  //         );
+  //       },
+  //     );
+  //   } else {
+  //     return OnPageLoading();
+  //   }
+  // }
+
+  Widget _buildAccountInformation(userData) {
     return Container(
       child: SizedBox(
         height: 40,
@@ -410,6 +594,29 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           var splitFullName =
               userData.fullName.split(" ").elementAt(0).toString();
 
+          var usersData = [
+            userData.displayName,
+            userData.fullName,
+            userData.email,
+            userData.phoneNumber,
+            userData.university,
+            userData.disciplin,
+            userData.degreeType,
+            userData.grade
+          ];
+          print(usersData);
+
+          for (var i = 0; i < usersData.length; i++) {
+            if (usersData[i] == '') {
+              condition = true;
+              print("${usersData[i]} condition true");
+              break;
+            } else {
+              condition = false;
+              print("${usersData[i]} condition false");
+            }
+          }
+
           //if loading is = true then show the loading otherwise show the dashboard
           return loading
               ? Loading()
@@ -467,7 +674,12 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           FlatButton(
                             onPressed: () {
                               // _onTap();
-                              onSearchButtonPressed(context);
+                              // onSearchButtonPressed(context);
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return _buildSearchDialog();
+                                  });
                             },
                             child: Icon(
                               Icons.search,
@@ -488,17 +700,28 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         // mainAxisAlignment: MainAxisAlignment.start,
                         // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          //1. Checks if the user has updated their data
-                          (userData.grade == '')
-                              //2. shows them the account information warning
+                          // //1. Checks if the user has updated their data
+                          // (userData.grade == '')
+                          //     //2. shows them the account information warning
+                          //     ? Column(
+                          //         children: [
+                          //           _buildAccountInformation(userData),
+                          //           SizedBox(height: 5)
+                          //         ],
+                          //       )
+                          //     //3. else shows them an empter container
+                          //     : Container(),
+
+                          (condition == true)
                               ? Column(
                                   children: [
-                                    _buildAccountInformation(),
+                                    _buildAccountInformation(userData),
                                     SizedBox(height: 5)
                                   ],
                                 )
                               //3. else shows them an empter container
                               : Container(),
+
                           //spacer
                           SizedBox(height: 10),
                           //
