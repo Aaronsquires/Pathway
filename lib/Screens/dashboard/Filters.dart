@@ -187,7 +187,6 @@ class _FiltersListState extends State<FiltersList> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      itemHeight: null,
                       isExpanded: true,
                       style: TextStyle(
                         color: (settings.colortheme == 'Dark')
@@ -210,7 +209,7 @@ class _FiltersListState extends State<FiltersList> {
                             fontSize: 14.0);
                       },
                       elevation: 10,
-                      items: <String>['All', 'first', '2:1', '2:2', 'Third']
+                      items: <String>['All', 'First', '2:1', '2:2', 'Third']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                             value: value, child: Text(value));

@@ -143,6 +143,7 @@ class _SignInState extends State<SignIn> {
                         size: 30,
                       ),
                     ),
+                    cursorColor: DarkColors.secondaryColor,
                     //gets the styling from TextStyles.dart
                     style: TextStyle(
                         color: DarkColors.textFormFieldTextColor,
@@ -176,6 +177,7 @@ class _SignInState extends State<SignIn> {
                         color: DarkColors.textFormFieldTextColor,
                           size: 30,
                         )),
+                        cursorColor: DarkColors.secondaryColor,
                     style: TextStyle(
                         color: DarkColors.textFormFieldTextColor,
                         fontSize: 16),

@@ -18,6 +18,13 @@ class BottomNavBar extends StatelessWidget {
   void onFiltersPressed(BuildContext context) => Navigator.push(
       context, MaterialPageRoute(builder: (context) => FiltersList()));
 
+  void onFiltersPressedIOS(BuildContext context) => Navigator.push(
+    context, CupertinoPageRoute(builder: (context) => FiltersList()));
+
+  void onSavedJobsPressedIOS(BuildContext context) => Navigator.push(
+  context, SlideRightRoute(page: SavedJobsList()));
+
+
   @override
   Widget build(BuildContext context) {
     SettingsProvider settings = Provider.of<SettingsProvider>(context);
@@ -72,26 +79,26 @@ class BottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            IconButton(
-              icon: Icon(
+            CupertinoButton(
+              child: Icon(
                 FontAwesomeIcons.solidHeart,
                 size: 35,
                 color: DarkColors.secondaryColor,
               ),
               onPressed: () {
                 print('onSavedJobsPressed');
-                onSavedJobsPressed(context);
+                onSavedJobsPressedIOS(context);
               },
             ),
-            IconButton(
-              icon: Icon(
+            CupertinoButton(
+              child: Icon(
                 Icons.filter_list,
                 size: 40,
                 color: DarkColors.secondaryColor,
               ),
               onPressed: () {
                 print('onFiltersPressed');
-                onFiltersPressed(context);
+                onFiltersPressedIOS(context);
               },
             )
           ],

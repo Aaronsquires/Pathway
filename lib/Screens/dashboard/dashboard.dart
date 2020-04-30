@@ -1,6 +1,5 @@
 //imports
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pathway/Models/Classes/User.dart';
@@ -269,9 +268,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           tabs: <Widget>[
             Container(child: Text("All")),
-            // Container(
-            //   child: Text("Filtered"),
-            // ),
             Container(
               child: Text("Recommended"),
             ),
@@ -441,8 +437,15 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   Widget _buildRecommendedJobsSection(userData) {
     var searchString = 'Software Developer';
-
-    var jobs = Provider.of<List<Jobs>>(context);
+    var recommended;
+    (userData.disciplin == 'Computer Science')
+        ? recommended = 'Computing'
+        : (userData.disciplin == 'Teacher')
+            ? recommended = 'Education'
+            : recommended = '';
+    var jobs = Provider.of<List<Jobs>>(context)
+        .where((jobs) => recommended.contains(jobs.category))
+        .toList();
 
     if (jobs != null) {
       return ListView.separated(
@@ -482,56 +485,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       return OnPageLoading();
     }
   }
-  // Widget _buildRecommendedJobsSection(userData) {
-  //   var searchString = 'Software Developer';
-  //   var recommended;
-  //   (userData.disciplin == 'Computer Science')
-  //       ? recommended = 'Computing'
-  //       : (userData.disciplin == 'Teacher')
-  //           ? recommended = 'Education'
-  //           : recommended = '';
-  //   var jobs = Provider.of<List<Jobs>>(context)
-  //       .where((jobs) => recommended.contains(jobs.category))
-  //       .toList();
-
-  //   if (jobs != null) {
-  //     return ListView.separated(
-  //       itemCount: jobs.length,
-  //       itemBuilder: (context, index) {
-  //         Jobs job = jobs[index];
-  //         return GestureDetector(
-  //           onTap: () {
-  //             var currentJob = job.jobTitle;
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                 builder: (context) => JobAdvert(),
-  //                 settings: RouteSettings(
-  //                   arguments: currentJob,
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //           child: JobCard(
-  //             logo: job.logo,
-  //             title: job.jobTitle,
-  //             date: job.endDate,
-  //             grade: job.gradeRequired,
-  //             pay: job.pay,
-  //             location: job.location,
-  //           ),
-  //         );
-  //       },
-  //       separatorBuilder: (BuildContext context, int index) {
-  //         return SizedBox(
-  //           height: 20,
-  //         );
-  //       },
-  //     );
-  //   } else {
-  //     return OnPageLoading();
-  //   }
-  // }
 
   Widget _buildAccountInformation(userData) {
     return Container(
@@ -604,7 +557,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             userData.degreeType,
             userData.grade
           ];
-          print(usersData);
+
 
           for (var i = 0; i < usersData.length; i++) {
             if (usersData[i] == '') {

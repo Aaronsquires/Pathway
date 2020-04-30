@@ -15,6 +15,7 @@ class DarkColors {
 
   //Tertiary Colours
   static const Color textTertiaryColor = Color(0xff79CC9F);
+  static const Color error = Colors.red;
 
   //Login Background
   static const Color loginColorLightGrey = Color(0xff333333);
@@ -22,7 +23,6 @@ class DarkColors {
 
   //Standalone Colours
   static const Color tabBarUnselected = Color.fromRGBO(196, 196, 196, 40);
-  static const Color error = Colors.red;
   static const Color boxShadow = Color.fromRGBO(0, 0, 0, 1);
 }
 

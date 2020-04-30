@@ -26,9 +26,7 @@ class _SavedJobsListState extends State<SavedJobsList> {
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.only(left: 25.0),
-          child: Text("Saved Jobs", style: TextStyle(
-            fontSize: 22
-          ),),
+          child: Text("Saved Jobs", style: ThemeText.titleStyle),
         ),
         backgroundColor: DarkColors.primaryColorDarker,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomRight: Radius.circular(40))),
