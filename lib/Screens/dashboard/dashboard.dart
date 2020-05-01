@@ -34,7 +34,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   //tabbar controller
   TabController tabController;
   bool loading = false;
-  bool condition = false;
+  bool userAccountCondition = false;
 
   TextEditingController editingController = TextEditingController();
 
@@ -267,9 +267,22 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 : LightColors.primaryTextColor,
           ),
           tabs: <Widget>[
-            Container(child: Text("All")),
             Container(
-              child: Text("Recommended"),
+                child: Text(
+              "All",
+              style: TextStyle(
+                color: (settings.colortheme == 'Dark')
+                    ? DarkColors.primaryTextColor
+                    : LightColors.primaryTextColor,
+              ),
+            )),
+            Container(
+              child: Text("Recommended",
+                  style: TextStyle(
+                    color: (settings.colortheme == 'Dark')
+                        ? DarkColors.primaryTextColor
+                        : LightColors.primaryTextColor,
+                  )),
             ),
           ]),
     );
@@ -352,6 +365,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   Widget _buildFilterJobsSection() {
     FiltersProvider filters = Provider.of<FiltersProvider>(context);
+    SettingsProvider settings = Provider.of<SettingsProvider>(context);
     var jobs = Provider.of<List<Jobs>>(context)
         //1. show list of jobs according to Categories selected
         .where((jobs) => (filters.category == 'All')
@@ -384,7 +398,11 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   return Chip(
                     label: Text(
                       chips[index],
-                      style: TextStyle(color: DarkColors.primaryTextColor),
+                      style: TextStyle(
+                        color: (settings.colortheme == 'Dark')
+                            ? DarkColors.primaryTextColor
+                            : LightColors.primaryTextColor,
+                      ),
                     ),
                     deleteIconColor: DarkColors.secondaryColor,
                     onDeleted: () {
@@ -394,7 +412,9 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                               ? filters.setGrade('All')
                               : filters.setLocation('All');
                     },
-                    backgroundColor: DarkColors.primaryColorDark,
+                    backgroundColor: (settings.colortheme == 'Dark')
+                        ? DarkColors.primaryColorDark
+                        : LightColors.primaryColorLight,
                   );
                 }));
           }
@@ -521,7 +541,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         MaterialPageRoute(
                             builder: (context) => AccountDetails()));
                   },
-                  child: Text('Here'),
+                  child: Text('Click Here'),
                   color: Colors.transparent,
                   elevation: 0,
                 )
@@ -558,14 +578,15 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             userData.grade
           ];
 
-
+          //Iterates through the usersData one at a time checking if the data is == to null
           for (var i = 0; i < usersData.length; i++) {
+            //if the userdata Index equals null set condition to true showing warning
             if (usersData[i] == '') {
-              condition = true;
+              userAccountCondition = true;
               print("${usersData[i]} condition true");
               break;
             } else {
-              condition = false;
+              userAccountCondition = false;
               print("${usersData[i]} condition false");
             }
           }
@@ -653,19 +674,8 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         // mainAxisAlignment: MainAxisAlignment.start,
                         // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          // //1. Checks if the user has updated their data
-                          // (userData.grade == '')
-                          //     //2. shows them the account information warning
-                          //     ? Column(
-                          //         children: [
-                          //           _buildAccountInformation(userData),
-                          //           SizedBox(height: 5)
-                          //         ],
-                          //       )
-                          //     //3. else shows them an empter container
-                          //     : Container(),
-
-                          (condition == true)
+                          //1. Checks if the user has updated their data
+                          (userAccountCondition == true)
                               ? Column(
                                   children: [
                                     _buildAccountInformation(userData),
@@ -717,5 +727,27 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         }
       },
     );
+  }
+}
+
+class ReportCode extends StatefulWidget {
+  @override
+  _ReportCodeState createState() => _ReportCodeState();
+}
+
+class _ReportCodeState extends State<ReportCode> {
+  Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return CupertinoButton(
+        onPressed: () {},
+        child: Text("IOS BUTTON"),
+      );
+    }
+    if (Platform.isAndroid) {
+      return RaisedButton(
+        onPressed: () {},
+        child: Text("Android BUTTON"),
+      );
+    }
   }
 }

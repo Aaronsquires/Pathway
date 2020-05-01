@@ -70,7 +70,8 @@ class SideMenu extends StatelessWidget {
                                 child: CircleAvatar(
                                   radius: 47,
                                   backgroundImage:
-                                      AssetImage('assets/images/UserImage.png'),
+                                      // AssetImage('assets/images/UserImage.png'),
+                                      (userData.image != '') ? AssetImage('assets/images/UserImage.png') : NetworkImage(userData.image)
                                 ),
                               ),
                             ),

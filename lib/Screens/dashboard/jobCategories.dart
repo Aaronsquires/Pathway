@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pathway/Models/Classes/jobs.dart';
+import 'package:pathway/Models/Services/settings_api.dart';
 import 'package:pathway/Screens/dashboard/jobAdvert.dart';
 import 'package:pathway/Utils/Widgets/Loading.dart';
 import 'package:pathway/Utils/Widgets/jobCard.dart';
@@ -15,10 +16,13 @@ class _JobCategoriesListState extends State<JobCategoriesList> {
   @override
   Widget build(BuildContext context) {
     final String category = ModalRoute.of(context).settings.arguments;
+    SettingsProvider settings = Provider.of<SettingsProvider>(context);
     final String searchResult = 'Computing';
-    
+
     return Scaffold(
-      backgroundColor: DarkColors.primaryColor,
+      backgroundColor: (settings.colortheme == 'Dark')
+          ? DarkColors.primaryColor
+          : LightColors.primaryColor,
       //Appbar
       appBar: AppBar(
         title: Padding(
@@ -27,11 +31,18 @@ class _JobCategoriesListState extends State<JobCategoriesList> {
             tag: 'dash',
             child: Text(
               category,
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(
+                fontSize: 22,
+                color: (settings.colortheme == 'Dark')
+                    ? DarkColors.primaryTextColor
+                    : LightColors.primaryTextColor,
+              ),
             ),
           ),
         ),
-        backgroundColor: DarkColors.primaryColorDarker,
+        backgroundColor: (settings.colortheme == 'Dark')
+            ? DarkColors.primaryColorDarker
+            : LightColors.primaryColorLighter,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(40))),
         automaticallyImplyLeading: false,
@@ -45,7 +56,9 @@ class _JobCategoriesListState extends State<JobCategoriesList> {
                 Icons.close,
                 size: 30,
               ),
-              color: DarkColors.primaryTextColor,
+              color: (settings.colortheme == 'Dark')
+                  ? DarkColors.primaryTextColor
+                  : LightColors.primaryTextColor,
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -58,10 +71,12 @@ class _JobCategoriesListState extends State<JobCategoriesList> {
         child: _buildAllJobsSection(category, searchResult),
       ),
     );
-  }   
+  }
 
   Widget _buildAllJobsSection(category, searchResult) {
-    var jobs = Provider.of<List<Jobs>>(context).where((jobs) => category.contains(jobs.category)).toList();
+    var jobs = Provider.of<List<Jobs>>(context)
+        .where((jobs) => category.contains(jobs.category))
+        .toList();
     if (jobs != null) {
       return Container(
         child: ListView.separated(

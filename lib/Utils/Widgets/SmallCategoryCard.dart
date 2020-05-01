@@ -23,31 +23,38 @@ class SmallCategoryCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: GestureDetector(
             child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    imageUrl,
-                    fit: BoxFit.fill,
-                    width: MediaQuery.of(context).size.width * 0.33,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(10),),
-                ),
-                Center(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: (settings.colortheme == 'Dark')
-                            ? DarkColors.primaryTextColor
-                            : LightColors.primaryTextColor),
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ],
-            )),
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                imageUrl,
+                fit: BoxFit.fill,
+                width: MediaQuery.of(context).size.width * 0.33,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: (settings.colortheme == 'Dark')
+                    ? Colors.black45
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: (settings.colortheme == 'Dark')
+                        ? DarkColors.primaryTextColor
+                        : DarkColors.primaryTextColor),
+                textAlign: TextAlign.center,
+                
+              ),
+            )
+          ],
+        )),
       ),
     );
   }

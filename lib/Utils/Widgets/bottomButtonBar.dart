@@ -11,19 +11,18 @@ import 'package:provider/provider.dart';
 
 class BottomNavBar extends StatelessWidget {
   //  Saved Jobs Button Press
-  void onSavedJobsPressed(BuildContext context) => Navigator.push(
-      context, SlideRightRoute(page: SavedJobsList()));
+  void onSavedJobsPressed(BuildContext context) =>
+      Navigator.push(context, SlideRightRoute(page: SavedJobsList()));
 
   //  Saved Jobs Button Press
   void onFiltersPressed(BuildContext context) => Navigator.push(
       context, MaterialPageRoute(builder: (context) => FiltersList()));
 
   void onFiltersPressedIOS(BuildContext context) => Navigator.push(
-    context, CupertinoPageRoute(builder: (context) => FiltersList()));
+      context, CupertinoPageRoute(builder: (context) => FiltersList()));
 
-  void onSavedJobsPressedIOS(BuildContext context) => Navigator.push(
-  context, SlideRightRoute(page: SavedJobsList()));
-
+  void onSavedJobsPressedIOS(BuildContext context) =>
+      Navigator.push(context, SlideRightRoute(page: SavedJobsList()));
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,9 @@ class BottomNavBar extends StatelessWidget {
         height: 75,
         padding: EdgeInsets.only(top: 10, bottom: 30),
         decoration: BoxDecoration(
-            color: (settings.colortheme == 'Dark') ? DarkColors.primaryColorDarker : LightColors.primaryColorLighter,
+            color: (settings.colortheme == 'Dark')
+                ? DarkColors.primaryColorDarker
+                : LightColors.primaryColorLighter,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25), topRight: Radius.circular(25)),
             boxShadow: [
@@ -72,10 +73,10 @@ class BottomNavBar extends StatelessWidget {
         height: 75,
         padding: EdgeInsets.only(bottom: 30),
         decoration: BoxDecoration(
-            color: (settings.colortheme == 'Dark') ? DarkColors.primaryColorDarker : LightColors.primaryColorLighter,
-            boxShadow: [
-              BoxShadow(color: Colors.black26, blurRadius: 10)
-            ]),
+            color: (settings.colortheme == 'Dark')
+                ? DarkColors.primaryColorDarker
+                : LightColors.primaryColorLighter,
+            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

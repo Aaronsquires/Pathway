@@ -20,7 +20,9 @@ class _FiltersListState extends State<FiltersList> {
     // var previousValue = '';
     List<String> chips = [filters.grade, filters.category, filters.location];
     return Scaffold(
-      backgroundColor: DarkColors.primaryColor,
+      backgroundColor: (settings.colortheme == 'Dark')
+          ? DarkColors.primaryColor
+          : LightColors.primaryColor,
 
       //Appbar
       appBar: AppBar(
@@ -28,10 +30,17 @@ class _FiltersListState extends State<FiltersList> {
           padding: const EdgeInsets.only(left: 25.0),
           child: Text(
             "Filters",
-            style: TextStyle(fontSize: 22),
+            style: TextStyle(
+              fontSize: 22,
+              color: (settings.colortheme == 'Dark')
+                  ? DarkColors.primaryTextColor
+                  : LightColors.primaryTextColor,
+            ),
           ),
         ),
-        backgroundColor: DarkColors.primaryColorDarker,
+        backgroundColor: (settings.colortheme == 'Dark')
+            ? DarkColors.primaryColorDarker
+            : LightColors.primaryColorLighter,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(40))),
         automaticallyImplyLeading: false,
@@ -45,7 +54,9 @@ class _FiltersListState extends State<FiltersList> {
                 Icons.close,
                 size: 30,
               ),
-              color: DarkColors.primaryTextColor,
+              color: (settings.colortheme == 'Dark')
+                  ? DarkColors.primaryTextColor
+                  : LightColors.primaryTextColor,
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -69,7 +80,11 @@ class _FiltersListState extends State<FiltersList> {
                     return Chip(
                       label: Text(
                         chips[index],
-                        style: TextStyle(color: DarkColors.primaryTextColor),
+                        style: TextStyle(
+                          color: (settings.colortheme == 'Dark')
+                              ? DarkColors.primaryTextColor
+                              : LightColors.primaryTextColor,
+                        ),
                       ),
                       deleteIconColor: DarkColors.secondaryColor,
                       onDeleted: () {
@@ -79,7 +94,9 @@ class _FiltersListState extends State<FiltersList> {
                                 ? filters.setGrade('All')
                                 : filters.setLocation('All');
                       },
-                      backgroundColor: DarkColors.primaryColorDark,
+                      backgroundColor: (settings.colortheme == 'Dark')
+                          ? DarkColors.primaryColorDark
+                          : LightColors.primaryColorLight,
                     );
                   })),
             ),
@@ -139,7 +156,13 @@ class _FiltersListState extends State<FiltersList> {
                             fontSize: 14.0);
                       },
                       elevation: 10,
-                      items: <String>[ 'All', 'Education','Engineering', 'Computing', 'Banking', 'Design'
+                      items: <String>[
+                        'All',
+                        'Education',
+                        'Engineering',
+                        'Computing',
+                        'Banking',
+                        'Design'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                             value: value, child: Text(value));
@@ -196,9 +219,13 @@ class _FiltersListState extends State<FiltersList> {
                       dropdownColor: (settings.colortheme == 'Dark')
                           ? DarkColors.primaryColorDark
                           : LightColors.primaryColorLighter,
+                      //sets the default value to the value stored in filters grade
                       value: filters.grade,
+                      // changes the value to the new string pressed from the list of items
                       onChanged: (String value) {
+                        //sets the grade variable to the new value
                         filters.setGrade(value);
+                        //Shows a toast dialog at the bottom of the screen reasuring the user
                         Fluttertoast.showToast(
                             msg: "Filtered jobs by grade: $value",
                             toastLength: Toast.LENGTH_LONG,
@@ -209,6 +236,7 @@ class _FiltersListState extends State<FiltersList> {
                             fontSize: 14.0);
                       },
                       elevation: 10,
+                      //the items to be shown in the dropdown menu
                       items: <String>['All', 'First', '2:1', '2:2', 'Third']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(

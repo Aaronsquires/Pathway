@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FiltersProvider with ChangeNotifier {
-  // List<String> _category;
   String _grade;
   String _location;
   String _category;
   List<String> _filterChips;
 
   FiltersProvider(){
-    // _category = ['Computing', 'Banking', 'Design', 'Education'];
     _grade = 'All';
     _location = 'All';
     _category = 'All';
