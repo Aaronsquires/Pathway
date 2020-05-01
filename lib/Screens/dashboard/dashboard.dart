@@ -382,6 +382,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ? counties.contains(jobs.location)
             : filters.location.contains(jobs.location))
         .toList();
+  
 
     List<String> chips = [filters.grade, filters.category, filters.location];
 

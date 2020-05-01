@@ -25,11 +25,15 @@ class _JobAdvertState extends State<JobAdvert> {
 
   var slideDuration = 100;
 
+
+  //Enables the launch url in app
   Future<void> _launchInApp(String url) async {
     if (await canLaunch(url)) {
       await launch(
+        //takes the launch url from firebase
         url,
         forceSafariVC: true,
+        //disables out of app webview
         forceWebView: false,
         headers: <String, String>{'header_key': 'header_value'},
       );
@@ -43,28 +47,26 @@ class _JobAdvertState extends State<JobAdvert> {
     super.initState();
   }
 
-  void showWidget() {
-    setState(() {
-      viewVisible = true;
-    });
-  }
-
-  void hideWidget() {
-    setState(() {
-      viewVisible = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    //set the current job as the argument from the gesturedetector
     final String currentJob = ModalRoute.of(context).settings.arguments;
+    //access to favourites shared prefs
     FavouriteJobs favourites = Provider.of<FavouriteJobs>(context);
+    //access to settings provider
     SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    //allows formating of numbers  
     final formatter = NumberFormat("##,###");
+    //select the jobs from firebase where the job title is equal to the currentJob
     var jobs = Provider.of<List<Jobs>>(context)
         .where((jobs) => currentJob.contains(jobs.jobTitle))
         .toList();
+    //set the launch url as the url saved to the job board
     String _launchUrl = jobs[0].jobUrl.toString();
+
+    var job = jobs[0];
+
+
     return Scaffold(
       backgroundColor: (settings.colortheme == 'Dark')
           ? DarkColors.primaryColor
@@ -77,7 +79,7 @@ class _JobAdvertState extends State<JobAdvert> {
           child: FadeIn(
             delay: Duration(milliseconds: slideDuration),
             child: Text(
-              jobs[0].jobTitle,
+              job.jobTitle,
               style: TextStyle(
                 fontSize: 22,
                 color: (settings.colortheme == 'Dark')
@@ -146,7 +148,8 @@ class _JobAdvertState extends State<JobAdvert> {
                       ),
                       child: Center(
                         child: Text(
-                          jobs[0].logo,
+                          //get the job logo
+                          job.logo,
                           style: ThemeText.titleStyle.copyWith(
                             color: (settings.colortheme == 'Dark')
                                 ? DarkColors.primaryTextColor
@@ -189,7 +192,7 @@ class _JobAdvertState extends State<JobAdvert> {
                               ),
                               SizedBox(width: 6),
                               Text(
-                                jobs[0].location,
+                                job.location,
                                 style: ThemeText.bodyStyle12.copyWith(
                                     color: (settings.colortheme == 'Dark')
                                         ? DarkColors.primaryTextColor
@@ -209,7 +212,7 @@ class _JobAdvertState extends State<JobAdvert> {
                               ),
                               SizedBox(width: 6),
                               Text(
-                                jobs[0].endDate,
+                                job.endDate,
                                 style: ThemeText.bodyStyle12.copyWith(
                                     color: (settings.colortheme == 'Dark')
                                         ? DarkColors.primaryTextColor
@@ -235,7 +238,7 @@ class _JobAdvertState extends State<JobAdvert> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                jobs[0].gradeRequired,
+                                job.gradeRequired,
                                 style: ThemeText.bodyStyle12.copyWith(
                                     color: (settings.colortheme == 'Dark')
                                         ? DarkColors.primaryTextColor
@@ -258,10 +261,10 @@ class _JobAdvertState extends State<JobAdvert> {
                               SizedBox(width: 5),
                               Text(
                                 formatter.format((settings.currency == 'Pounds')
-                                    ? jobs[0].pay
+                                    ? job.pay
                                     : (settings.currency == 'Euros')
-                                        ? jobs[0].pay * 1.15
-                                        : jobs[0].pay * 1.25),
+                                        ? job.pay * 1.15
+                                        : job.pay * 1.25),
                                 style: ThemeText.bodyStyle12.copyWith(
                                     color: (settings.colortheme == 'Dark')
                                         ? DarkColors.primaryTextColor
@@ -310,7 +313,7 @@ class _JobAdvertState extends State<JobAdvert> {
                                 SizedBox(height: 10),
 
                                 Text(
-                                  jobs[0].description,
+                                  job.description,
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: (settings.colortheme == 'Dark')
@@ -345,9 +348,10 @@ class _JobAdvertState extends State<JobAdvert> {
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {
                       //checks if the current job has a url if not then returns the application process
-                      if (jobs[0].jobUrl != '') {
+                      if (job.jobUrl != '') {
                         _launchInApp(_launchUrl);
                       } else {
+                        //Sends the user to the application page along with the currentJob title
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -381,14 +385,19 @@ class _JobAdvertState extends State<JobAdvert> {
                   child: RaisedButton(
                       padding: EdgeInsets.all(10.0),
                       onPressed: () {
+                        //Sets the job as saved to prefs or removes from prefs
                         if (favourites.savedJobs.contains(currentJob)) {
+                          //removes the job from saved prefs
                           favourites.removeSavedJobs(currentJob);
                           setState(() {
+                            //sets the colour back to dark
                             isButtonPressed = !isButtonPressed;
                           });
                         } else {
+                          //Adds the job to saved prefs
                           favourites.addSavedJobs(currentJob);
                           setState(() {
+                            //sets the colour to Highlighted
                             isButtonPressed = !isButtonPressed;
                           });
                         }
@@ -406,293 +415,3 @@ class _JobAdvertState extends State<JobAdvert> {
     );
   }
 }
-
-// body: SingleChildScrollView(
-//         child: Container(
-//           //page container
-//           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 40),
-//           alignment: Alignment.topCenter,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.start,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: <Widget>[
-//               //job container
-//               FadeIn(
-//                 delay: Duration(milliseconds: slideDuration),
-//                   child: Container(
-//                   width: MediaQuery.of(context).size.width * 0.9,
-//                   decoration: BoxDecoration(
-//                     color: DarkColors.primaryColorDark,
-//                     borderRadius: BorderRadius.circular(15),
-//                   ),
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: <Widget>[
-
-//                       //Logo Section
-//                       Container(
-//                         width: MediaQuery.of(context).size.width,
-//                         height: MediaQuery.of(context).size.height * 0.1,
-//                         decoration: BoxDecoration(
-//                           color: DarkColors.primaryColorDarker,
-//                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
-//                         ),
-//                       ),
-
-//                       //Border
-//                       Container(
-//                         decoration: BoxDecoration(
-//                             border: Border(
-//                                 bottom: BorderSide(
-//                           color: DarkColors.secondaryColor,
-//                           width: 1,
-//                           style: BorderStyle.solid,
-//                         ))),
-//                       ),
-
-//                       //Job Title
-//                       Text(
-//                         currentJob,
-//                         style: TextStyle(
-//                             fontSize: 20, color: DarkColors.primaryTextColor),
-//                       ),
-
-//                       //Spacer
-//                       SizedBox(
-//                         height: 20,
-//                       ),
-
-//                       //Header - End Date, location, gradeReq, Category
-//                       Column(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: <Widget>[
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.start,
-//                             children: <Widget>[
-//                               SizedBox(width: 10),
-//                               Column(
-//                                 mainAxisAlignment: MainAxisAlignment.start,
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: <Widget>[
-//                                   Row(children: <Widget>[
-//                                     Icon(
-//                                       (Platform.isAndroid)
-//                                           ? Icons.location_on
-//                                           : CupertinoIcons.location_solid,
-//                                       size: 16,
-//                                       color: DarkColors.secondaryColor,
-//                                     ),
-//                                     SizedBox(width: 6),
-//                                     Text(
-//                                       jobs[0].location,
-//                                       style: ThemeText.bodyStyle12.copyWith(
-//                                           color: (settings.colortheme ==
-//                                                   'Dark')
-//                                               ? DarkColors.primaryTextColor
-//                                               : LightColors.primaryTextColor),
-//                                     ),
-//                                   ]),
-//                                   SizedBox(
-//                                     height: 14,
-//                                   ),
-//                                   Row(children: <Widget>[
-//                                     Icon(
-//                                       (Platform.isAndroid)
-//                                           ? Icons.calendar_today
-//                                           : FontAwesomeIcons.calendar,
-//                                       size: 16,
-//                                       color: DarkColors.secondaryColor,
-//                                     ),
-//                                     SizedBox(width: 6),
-//                                     Text(
-//                                       jobs[0].endDate,
-//                                       style: ThemeText.bodyStyle12.copyWith(
-//                                           color: (settings.colortheme ==
-//                                                   'Dark')
-//                                               ? DarkColors.primaryTextColor
-//                                               : LightColors.primaryTextColor),
-//                                     ),
-//                                   ]),
-//                                 ],
-//                               ),
-//                               SizedBox(
-//                                 width: 40,
-//                               ),
-//                               Column(
-//                                 mainAxisAlignment: MainAxisAlignment.start,
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: <Widget>[
-//                                   Row(children: <Widget>[
-//                                     Icon(
-//                                       (Platform.isAndroid)
-//                                           ? FontAwesomeIcons.graduationCap
-//                                           : FontAwesomeIcons.graduationCap,
-//                                       size: 16,
-//                                       color: DarkColors.secondaryColor,
-//                                     ),
-//                                     SizedBox(width: 10),
-//                                     Text(
-//                                       jobs[0].gradeRequired,
-//                                       style: ThemeText.bodyStyle12.copyWith(
-//                                           color: (settings.colortheme ==
-//                                                   'Dark')
-//                                               ? DarkColors.primaryTextColor
-//                                               : LightColors.primaryTextColor),
-//                                     ),
-//                                   ]),
-//                                   SizedBox(
-//                                     height: 14,
-//                                   ),
-//                                   Row(children: <Widget>[
-//                                     Icon(
-//                                       (Platform.isAndroid)
-//                                           ? FontAwesomeIcons.moneyBillAlt
-//                                           : FontAwesomeIcons.moneyBillAlt,
-//                                       size: 16,
-//                                       color: DarkColors.secondaryColor,
-//                                     ),
-//                                     SizedBox(width: 10),
-//                                     Text(
-//                                       jobs[0].category,
-//                                       style: ThemeText.bodyStyle12.copyWith(
-//                                           color: (settings.colortheme ==
-//                                                   'Dark')
-//                                               ? DarkColors.primaryTextColor
-//                                               : LightColors.primaryTextColor),
-//                                     ),
-//                                   ]),
-//                                 ],
-//                               ),
-//                             ],
-//                           ),
-//                           SizedBox(height: 10),
-//                           //border
-//                           Container(
-//                             decoration: BoxDecoration(
-//                                 border: Border(
-//                                     bottom: BorderSide(
-//                               color: DarkColors.secondaryColor,
-//                               width: 1,
-//                               style: BorderStyle.solid,
-//                             ))),
-//                           ),
-//                         ],
-//                       ),
-
-//                       //spacer
-//                       SizedBox(height: 20),
-
-//                       //Main Body
-//                       Text(
-//                         'Job Description',
-//                         style: TextStyle(
-//                             fontSize: 18, color: DarkColors.primaryTextColor),
-//                       ),
-
-//                       //spacer
-//                       SizedBox(height: 10),
-
-//                       Text(
-//                         (viewVisible == false)
-//                             ? jobs[0].description.substring(0, 591) + '...'
-//                             : jobs[0].description,
-//                         style: TextStyle(
-//                             fontSize: 14, color: DarkColors.primaryTextColor),
-//                       ),
-
-//                       //spacer
-//                       SizedBox(height: 10),
-
-//                       Container(
-//                         decoration: BoxDecoration(
-//                             border: Border(
-//                                 bottom: BorderSide(
-//                           color: DarkColors.secondaryColor,
-//                           width: 1,
-//                           style: BorderStyle.solid,
-//                         ))),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-
-//               SizedBox(height: 20),
-//               FadeIn(
-//                 delay: Duration(milliseconds: slideDuration),
-//                 offset: Offset(0.0, 64.0),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: <Widget>[
-//                     ButtonTheme(
-//                       minWidth: 270,
-//                       height: 50,
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(10)),
-//                       buttonColor: DarkColors.secondaryColor,
-//                       child: RaisedButton(
-//                         padding: EdgeInsets.all(10.0),
-//                         onPressed: () {
-//                           //checks if the current job has a url if not then returns the application process
-//                           if (jobs[0].jobUrl != '') {
-//                             _launchInApp(_launchUrl);
-//                           } else {
-//                             Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                 builder: (context) => InJobApplication(),
-//                                 settings: RouteSettings(
-//                                   arguments: currentJob,
-//                                 ),
-//                               ),
-//                             );
-//                           }
-//                         },
-//                         child: Text(
-//                           'Apply for job',
-//                           style: TextStyle(
-//                               fontSize: 20,
-//                               color: DarkColors.secondaryTextColorDark),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       width: 25,
-//                     ),
-//                     ButtonTheme(
-//                       minWidth: 50,
-//                       height: 50,
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(10)),
-//                       buttonColor: (favourites.savedJobs.contains(currentJob))
-//                           ? DarkColors.secondaryColor
-//                           : DarkColors.primaryColorDarker,
-//                       child: RaisedButton(
-//                           padding: EdgeInsets.all(10.0),
-//                           onPressed: () {
-//                             if (favourites.savedJobs.contains(currentJob)) {
-//                               favourites.removeSavedJobs(currentJob);
-//                               setState(() {
-//                                 isButtonPressed = !isButtonPressed;
-//                               });
-//                             } else {
-//                               favourites.addSavedJobs(currentJob);
-//                               setState(() {
-//                                 isButtonPressed = !isButtonPressed;
-//                               });
-//                             }
-//                           },
-//                           child: Icon(
-//                             Icons.favorite,
-//                             color: DarkColors.primaryTextColor,
-//                           )),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),

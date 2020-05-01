@@ -6,7 +6,10 @@ import 'package:pathway/Screens/LoginSystem/recoverAccount.dart';
 import 'package:pathway/Utils/Widgets/Animations.dart';
 import 'package:pathway/Utils/Widgets/Loading.dart';
 import 'package:pathway/Utils/Widgets/TextFields.dart';
+import 'package:pathway/Utils/Widgets/Validators.dart';
 import 'package:pathway/Utils/values/values.dart';
+
+
 
 class SignIn extends StatefulWidget {
   //ccalls the toggleview function in authentication on change to sign up
@@ -149,7 +152,7 @@ class _SignInState extends State<SignIn> {
                         color: DarkColors.textFormFieldTextColor,
                         fontSize: 16),              
                     //checks if the user has entereed data if not will return an error to Enter an Email
-                    validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                    validator: EmailFieldValidator.validate,
                     //when the user inputs data the onChanged will set value data into the email variable
                     onChanged: (val) {setState(() => email = val);},
                   ),
@@ -181,8 +184,7 @@ class _SignInState extends State<SignIn> {
                     style: TextStyle(
                         color: DarkColors.textFormFieldTextColor,
                         fontSize: 16),
-                    validator: (val) =>
-                        val.length < 6 ? 'Enter a password' : null,
+                    validator: PasswordFieldValidator.validate,
                     obscureText: true,
                     onChanged: (val) {
                       setState(() => password = val);

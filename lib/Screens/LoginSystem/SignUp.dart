@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pathway/Models/Services/Authentication_api.dart';
 import 'package:pathway/Utils/Widgets/Loading.dart';
 import 'package:pathway/Utils/Widgets/TextFields.dart';
+import 'package:pathway/Utils/Widgets/Validators.dart';
 import 'package:pathway/Utils/values/values.dart';
 
 class SignUp extends StatefulWidget {
@@ -106,8 +107,7 @@ class _SignUpState extends State<SignUp> {
                         style: TextStyle(
                             color: DarkColors.textFormFieldTextColor,
                             fontSize: 16),
-                        validator: (val) =>
-                            val.isEmpty ? 'Enter an email' : null,
+                        validator: EmailFieldValidator.validate,
                         onChanged: (val) {
                           setState(() => email = val);
                         },
@@ -138,7 +138,7 @@ class _SignUpState extends State<SignUp> {
                         style: TextStyle(
                             color: DarkColors.textFormFieldTextColor,
                             fontSize: 16),
-                        validator: (val) => val.isEmpty ? 'display name' : null,
+                        validator: DisplayNameFieldValidator.validate,
                         onChanged: (val) {
                           setState(() => displayName = val);
                         },
@@ -169,8 +169,7 @@ class _SignUpState extends State<SignUp> {
                             color: DarkColors.textFormFieldTextColor,
                             fontSize: 16),
                         obscureText: true,
-                        validator: (val) =>
-                            val.length < 6 ? 'Enter a password' : null,
+                        validator: PasswordFieldValidator.validate,
                         onChanged: (val) {
                           setState(() => password = val);
                         },

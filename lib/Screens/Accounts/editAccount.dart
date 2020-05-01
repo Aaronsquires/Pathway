@@ -14,14 +14,7 @@ class AccountDetails extends StatefulWidget {
 class _AccountDetailsState extends State<AccountDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final List<String> universities = [
-    'Nottingham Trent University',
-    'University of Cambridge',
-    'University of Nottingham',
-    'University of Durham',
-    'University of Lincoln'
-  ];
-
+  //Set the values for each of the form fields
   String _currentDisplayName;
   String _currentFullName;
   String _currentEmail;
@@ -34,8 +27,10 @@ class _AccountDetailsState extends State<AccountDetails> {
 
   @override
   Widget build(BuildContext context) {
+    //access the user
     User user = Provider.of<User>(context);
 
+    //access the user unique data from Users Collection
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).usersdata,
         builder: (context, snapshot) {
@@ -169,14 +164,14 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                     hintStyle: TextStyle(
                                                         color: DarkColors
                                                             .textFormFieldTextColor,
-                                                        fontSize: 18)),
+                                                        fontSize: 14)),
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 initialValue:
                                                     userData.displayName,
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     color: DarkColors
                                                         .textFormFieldTextColor),
                                                 cursorColor: Colors.white,
@@ -191,7 +186,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 child: Text(
                                                   "Display Name",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       color: DarkColors
                                                           .primaryColor),
                                                 ),
@@ -234,13 +229,13 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                     hintStyle: TextStyle(
                                                         color: DarkColors
                                                             .textFormFieldTextColor,
-                                                        fontSize: 18)),
+                                                        fontSize: 14)),
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 initialValue: userData.fullName,
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     color: DarkColors
                                                         .textFormFieldTextColor),
                                                 cursorColor: Colors.white,
@@ -255,7 +250,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 child: Text(
                                                   "Full Name",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       color: DarkColors
                                                           .primaryColor),
                                                 ),
@@ -298,13 +293,13 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                     hintStyle: TextStyle(
                                                         color: DarkColors
                                                             .textFormFieldTextColor,
-                                                        fontSize: 18)),
+                                                        fontSize: 14)),
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 initialValue: userData.email,
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     color: DarkColors
                                                         .textFormFieldTextColor),
                                                 cursorColor: Colors.white,
@@ -318,7 +313,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 child: Text(
                                                   "E-mail",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       color: DarkColors
                                                           .primaryColor),
                                                 ),
@@ -361,7 +356,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                     hintStyle: TextStyle(
                                                         color: DarkColors
                                                             .textFormFieldTextColor,
-                                                        fontSize: 18)),
+                                                        fontSize: 14)),
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 initialValue: userData
@@ -369,7 +364,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                     .toString(),
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     color: DarkColors
                                                         .textFormFieldTextColor),
                                                 cursorColor: Colors.white,
@@ -384,7 +379,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 child: Text(
                                                   "Phone Number",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       color: DarkColors
                                                           .primaryColor),
                                                 ),
@@ -455,52 +450,52 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                       offset: Offset(0, 1),
                                                       blurRadius: 4)
                                                 ]),
-                                            child: Stack(children: <Widget>[
-                                              TextFormField(
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            right: 15),
-                                                    hintText: "University",
-                                                    hintStyle: TextStyle(
-                                                        color: DarkColors
-                                                            .textFormFieldTextColor,
-                                                        fontSize: 18)),
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                initialValue:
-                                                    userData.university,
-                                                textAlign: TextAlign.end,
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton<String>(
+                                                hint: Text('Hint'),
+                                                itemHeight: null,
+                                                isExpanded: true,
                                                 style: TextStyle(
-                                                    fontSize: 18,
                                                     color: DarkColors
-                                                        .textFormFieldTextColor),
-                                                cursorColor: Colors.white,
+                                                        .primaryTextColor),
+                                                dropdownColor:
+                                                    DarkColors.primaryColorDark,
+                                                value: userData.disciplin,
                                                 onChanged: (val) => setState(
-                                                    () => _currentUniversity =
+                                                    () => _currentDisciplin =
                                                         val),
+                                                elevation: 10,
+                                                items: <String>[
+                                                  '',
+                                                  'Computer Science',
+                                                  'Teaching',
+                                                  'Sales',
+                                                  'Recruitment',
+                                                  'Accounting',
+                                                  'Design',
+                                                  'Engineering',
+                                                  'Legal'
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                                  return DropdownMenuItem<
+                                                          String>(
+                                                      value: value,
+                                                      child: Text(value));
+                                                }).toList(),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 14, 0, 0),
-                                                child: Text(
-                                                  "University",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: DarkColors
-                                                          .primaryColor),
-                                                ),
-                                              )
-                                            ]),
+                                            ),
                                           ),
+
+
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 0.03,
                                           ),
+
+
+
                                           Container(
                                             padding: EdgeInsets.only(
                                                 left: 15, top: 3, bottom: 3),
@@ -528,20 +523,18 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                         .primaryTextColor),
                                                 dropdownColor:
                                                     DarkColors.primaryColorDark,
-                                                value: userData.disciplin,
+                                                value: userData.university,
                                                 onChanged: (val) => setState(
-                                                    () => _currentDisciplin = val),
+                                                    () => _currentUniversity =
+                                                        val),
                                                 elevation: 10,
                                                 items: <String>[
                                                   '',
-                                                  'Computer Science',
-                                                  'Teaching',
-                                                  'Sales',
-                                                  'Recruitment',
-                                                  'Accounting',
-                                                  'Design',
-                                                  'Engineering',
-                                                  'Legal'
+                                                  'Nottingham Trent University',
+                                                  'University of Cambridge',
+                                                  'University of Nottingham',
+                                                  'University of Durham',
+                                                  'University of Lincoln'
                                                 ].map<DropdownMenuItem<String>>(
                                                     (String value) {
                                                   return DropdownMenuItem<
@@ -552,7 +545,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                               ),
                                             ),
                                           ),
-                                          
+
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -560,7 +553,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 0.03,
                                           ),
                                           //Degree Type
-                                          Container(
+Container(
                                             padding: EdgeInsets.only(
                                                 left: 15, top: 3, bottom: 3),
                                             width: MediaQuery.of(context)
@@ -577,45 +570,33 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                       offset: Offset(0, 1),
                                                       blurRadius: 4)
                                                 ]),
-                                            child: Stack(children: <Widget>[
-                                              TextFormField(
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            right: 15),
-                                                    hintText: "Degree Type",
-                                                    hintStyle: TextStyle(
-                                                        color: DarkColors
-                                                            .textFormFieldTextColor,
-                                                        fontSize: 18)),
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                initialValue:
-                                                    userData.degreeType,
-                                                textAlign: TextAlign.end,
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton<String>(
+                                                hint: Text('Hint'),
+                                                itemHeight: null,
+                                                isExpanded: true,
                                                 style: TextStyle(
-                                                    fontSize: 18,
                                                     color: DarkColors
-                                                        .textFormFieldTextColor),
-                                                cursorColor: Colors.white,
+                                                        .primaryTextColor),
+                                                dropdownColor:
+                                                    DarkColors.primaryColorDark,
+                                                value: userData.degreeType,
                                                 onChanged: (val) => setState(
-                                                    () => _currentDegreeType =
-                                                        val),
+                                                    () => _currentDegreeType = val),
+                                                elevation: 10,
+                                                items: <String>[
+                                                  '',
+                                                  'Bachelors',
+                                                  'Masters'
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                                  return DropdownMenuItem<
+                                                          String>(
+                                                      value: value,
+                                                      child: Text(value));
+                                                }).toList(),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 14, 0, 0),
-                                                child: Text(
-                                                  "Degree Type",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: DarkColors
-                                                          .primaryColor),
-                                                ),
-                                              )
-                                            ]),
+                                            ),
                                           ),
                                           SizedBox(
                                             height: MediaQuery.of(context)
@@ -694,26 +675,20 @@ class _AccountDetailsState extends State<AccountDetails> {
                           child: RaisedButton(
                             elevation: 10,
                             padding: EdgeInsets.all(10.0),
+                            
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 await DatabaseService(uid: user.uid)
                                     .updateUserData(
                                         _currentImage ?? snapshot.data.image,
-                                        _currentDisplayName ??
-                                            snapshot.data.displayName,
+                                        _currentDisplayName ?? snapshot.data.displayName,
                                         _currentEmail ?? snapshot.data.email,
-                                        _currentFullName ??
-                                            snapshot.data.fullName,
-                                        _currentPhoneNumber ??
-                                            snapshot.data.phoneNumber,
-                                        _currentUniversity ??
-                                            snapshot.data.university,
-                                        _currentDisciplin ??
-                                            snapshot.data.disciplin,
-                                        _currentDegreeType ??
-                                            snapshot.data.degreeType,
+                                        _currentFullName ?? snapshot.data.fullName,
+                                        _currentPhoneNumber ?? snapshot.data.phoneNumber,
+                                        _currentUniversity ?? snapshot.data.university,
+                                        _currentDisciplin ?? snapshot.data.disciplin,
+                                        _currentDegreeType ?? snapshot.data.degreeType,
                                         _currentGrade ?? snapshot.data.grade);
-
                                 Navigator.pop(context);
                               }
                             },
