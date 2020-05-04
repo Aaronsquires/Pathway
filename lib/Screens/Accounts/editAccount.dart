@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pathway/Models/Classes/User.dart';
 import 'package:pathway/Models/Classes/userData.dart';
 import 'package:pathway/Models/Services/Database_api.dart';
@@ -13,6 +16,17 @@ class AccountDetails extends StatefulWidget {
 
 class _AccountDetailsState extends State<AccountDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  File _image;
+
+  Future getImage() async {
+  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+  setState(() {
+    _image = image;
+  });
+}
+
 
   //Set the values for each of the form fields
   String _currentDisplayName;
@@ -724,7 +738,7 @@ Container(
             backgroundColor: DarkColors.secondaryColor,
             child: CircleAvatar(
               radius: 67,
-              backgroundImage: AssetImage('assets/images/UserImage.png'),
+              backgroundImage: _image == null ? AssetImage('assets/images/UserImage.png') : Image.file(_image),
             ),
           ),
           //Button
@@ -732,7 +746,7 @@ Container(
             left: 73,
             top: 93,
             child: RaisedButton(
-              onPressed: () {},
+              onPressed: getImage,
               shape: CircleBorder(),
               color: DarkColors.secondaryColor,
               child: Icon(
