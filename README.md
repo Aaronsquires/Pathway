@@ -2,7 +2,7 @@
 
 This project was created for my final year at Nottingham Trent University studying BSc Software Engineering. The application has been created in Flutter dart and aims to provide a platform for students and graduates to find their first job or placement scheme.
 
-# Abstract -
+# Abstract
 
 In the computer science industry, it is becoming increasingly difficult for students and recent graduates to find their first junior role. Research into the matter has shown that only a few top companies such as LinkedIn or Indeed.com, offer a way for the newly educated to find their entry point into any chosen career path. This project aims to determine a new solution for all students and graduates to find their dream first role in any work sector but primarily focusing on developing a successful pitch idea to investors.
 
